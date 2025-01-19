@@ -1,4 +1,3 @@
-import { Component } from 'vue'
 import AngelfishIcon from './AngelfishIcon.vue'
 import ClockIcon from './ClockIcon.vue'
 import GaugeIcon from './GaugeIcon.vue'
@@ -23,7 +22,9 @@ export type IconNames =
   | 'Goldfish'
   | 'Guppy'
   | 'Oscar'
-const Icons: Record<IconNames, Component> = {
+
+// TODO: better type
+const Icons: Record<IconNames, any> = {
   Clock: ClockIcon,
   Gauge: GaugeIcon,
   Pause: PauseIcon,

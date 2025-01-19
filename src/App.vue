@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import FishTank from '@/components/fish-container/FishTank.vue'
-import FishTable from '@/components/fish-datatable/FishTable.vue'
+import FishTable from '@/components/data-table/FishTable.vue'
+import FishTank from '@/components/fish-tank/FishTank.vue'
 import { useFishStore } from '@/stores/fish'
 import { useSimulatorStore } from '@/stores/simulator'
 import { computed, toRefs, watch } from 'vue'

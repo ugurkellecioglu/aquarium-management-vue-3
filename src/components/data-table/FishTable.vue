@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import TableRow from '@/components/fish-datatable/TableRow.vue'
+import TableRow from '@/components/data-table/TableRow.vue'
 import type { ExtendedFish } from '@/types/fish'
 
 defineProps<{
