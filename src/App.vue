@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import FishTable from '@/components/data-table/FishTable.vue'
 import FishTank from '@/components/fish-tank/FishTank.vue'
+import GameControls from '@/components/game-manager/GameControls.vue'
 import { useFishStore } from '@/stores/fish'
 import { useSimulatorStore } from '@/stores/simulator'
-import { computed, toRefs, watch } from 'vue'
-
+import { computed, onMounted, toRefs, watch } from 'vue'
 // Store setup
 const simulator = useSimulatorStore()
 const fishStore = useFishStore()
@@ -26,8 +26,9 @@ const showLoading = computed(() => isFetching.value)
 const showError = computed(() => error.value)
 const showContent = computed(() => !isFetching.value && !error.value)
 
-// Fetch fish data on component mount
-fetchFish()
+onMounted(() => {
+  fetchFish()
+})
 </script>
 
 <template>
@@ -37,11 +38,10 @@ fetchFish()
         <div class="content">
           <div class="min-h-screen bg-gray-50">
             <div
-              class="fixed !z-50 sm:translate-x-0 sm:right-8 sm:top-1/2 sm:-translate-y-1/2 bottom-4 left-1/2 sm:left-[initial] -translate-x-1/2"
+              class="fixed z-max sm:translate-x-0 sm:right-8 sm:top-1/2 sm:-translate-y-1/2 bottom-4 left-1/2 sm:left-[initial] -translate-x-1/2"
             >
               <GameControls />
             </div>
-            ;
 
             <div class="container mx-auto px-5 max-w-7xl py-8">
               <!-- Header -->
