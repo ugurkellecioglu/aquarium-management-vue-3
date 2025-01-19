@@ -17,3 +17,12 @@ export interface Fish {
   weight: number // in grams
   feedingSchedule: FeedingSchedule
 }
+
+export interface ExtendedFish extends Omit<Fish, 'feedingSchedule'> {
+  feedingTimes: number[]
+  skippedFeedings: number
+  healthStatus: FishHealthStatus
+  feedingSchedule: Omit<FeedingSchedule, 'lastFeed'> & { lastFeed: number }
+  dailyFeedingTotal: number
+  todayFeedingAmount: number
+}
