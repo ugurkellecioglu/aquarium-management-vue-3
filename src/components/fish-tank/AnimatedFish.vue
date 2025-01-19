@@ -5,6 +5,7 @@ import { useSimulatorStore } from '@/stores/simulator'
 import type { ExtendedFish } from '@/types/fish'
 import anime from 'animejs'
 import { defineAsyncComponent, onBeforeUnmount, onMounted, ref, toRefs, watch } from 'vue'
+
 const Popover = defineAsyncComponent(() => import('primevue/popover'))
 
 const props = defineProps<{
@@ -19,21 +20,18 @@ const props = defineProps<{
   }
 }>()
 
-// We unwrap our store state and actions.
+// Store setup
 const simulatorStore = useSimulatorStore()
 const { isRunning, isPaused } = toRefs(simulatorStore)
 const { pauseSimulation, resumeSimulation } = simulatorStore
 
 const fishElement = ref<HTMLDivElement | null>(null)
-
 const currentX = ref(0)
 const currentY = ref(0)
 const currentAnimation = ref<anime.AnimeInstance | null>(null)
 
 const FISH_WIDTH = 80
 const FISH_HEIGHT = 32
-
-// PrimeVue Popover ref
 const popover = ref<InstanceType<typeof Popover> | null>(null)
 
 function getRandomPosition() {
@@ -133,11 +131,6 @@ onBeforeUnmount(() => {
   }
 })
 
-/**
- * Clicking a fish:
- * 1. Pause simulation (if running).
- * 2. Show the popover.
- */
 function onClickFish(event: MouseEvent) {
   if (isRunning.value && !isPaused.value) {
     pauseSimulation()
@@ -145,10 +138,7 @@ function onClickFish(event: MouseEvent) {
   popover.value?.show(event)
 }
 
-/**
- * When the popover hides:
- * 1. Resume simulation
- */
+// When the popover hides
 function onPopoverHide() {
   if (isPaused.value) {
     resumeSimulation()
