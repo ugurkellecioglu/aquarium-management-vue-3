@@ -1,4 +1,5 @@
 import AngelfishIcon from './AngelfishIcon.vue'
+import BettaIcon from './BettaIcon.vue'
 import ClockIcon from './ClockIcon.vue'
 import GaugeIcon from './GaugeIcon.vue'
 import GoldfishIcon from './GoldfishIcon.vue'
@@ -9,7 +10,6 @@ import PlayIcon from './PlayIcon.vue'
 import SeaMoss from './SeaMoss.vue'
 import SeaMossSecond from './SeaMossSecond.vue'
 import SeaMossThird from './SeaMossThird.vue'
-
 export type IconNames =
   | 'Clock'
   | 'Gauge'
@@ -22,7 +22,7 @@ export type IconNames =
   | 'Goldfish'
   | 'Guppy'
   | 'Oscar'
-
+  | 'Betta'
 // TODO: better type
 const Icons: Record<IconNames, any> = {
   Clock: ClockIcon,
@@ -36,6 +36,7 @@ const Icons: Record<IconNames, any> = {
   Goldfish: GoldfishIcon,
   Guppy: GuppyIcon,
   Oscar: OscarIcon,
+  Betta: BettaIcon,
 }
 
 export default Icons
