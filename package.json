@@ -17,10 +17,13 @@
   },
   "dependencies": {
     "animejs": "^3.2.2",
+    "autoprefixer": "^10.4.20",
     "axios": "^1.7.9",
     "date-fns": "^4.1.0",
     "pinia": "^2.3.0",
+    "postcss": "^8.5.1",
     "primevue": "^4.2.5",
+    "tailwindcss": "^3.4.17",
     "vue": "^3.5.13"
   },
   "devDependencies": {
