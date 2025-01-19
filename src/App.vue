@@ -3,15 +3,30 @@ import FishTank from '@/components/fish-container/FishTank.vue'
 import FishTable from '@/components/fish-datatable/FishTable.vue'
 import { useFishStore } from '@/stores/fish'
 import { useSimulatorStore } from '@/stores/simulator'
-import { toRefs, watch } from 'vue'
+import { computed, toRefs, watch } from 'vue'
 
+// Store setup
 const simulator = useSimulatorStore()
 const fishStore = useFishStore()
-const { fish } = toRefs(fishStore)
+const { isFetching, error, fish, isAllFishDead } = toRefs(fishStore)
 const { updateFishHealth, fetchFish } = fishStore
 
+// Watch fish health when time changes
 watch(() => simulator.currentTime, updateFishHealth)
 
+// Watch for all fish dying
+watch(isAllFishDead, (allDead) => {
+  if (allDead) {
+    simulator.stopSimulation()
+  }
+})
+
+// Computed properties for better reactivity and readability
+const showLoading = computed(() => isFetching.value)
+const showError = computed(() => error.value)
+const showContent = computed(() => !isFetching.value && !error.value)
+
+// Fetch fish data on component mount
 fetchFish()
 </script>
 
@@ -34,14 +49,22 @@ fetchFish()
                 <h1 class="text-4xl font-bold text-center text-gray-800">Balık Takip Sistemi</h1>
               </header>
 
-              <!-- Main Content -->
-              <main class="space-y-8">
+              <!-- Loading State -->
+              <Loading v-if="showLoading" />
+              <Error
+                v-else-if="showError"
+                title="Bir hata oluştu"
+                actionText="Tekrar Dene"
+                @onClick="fetchFish"
+              />
+              <main v-else-if="showContent" class="space-y-8">
                 <FishTank />
                 <FishTable :fish="fish" />
               </main>
             </div>
           </div>
         </div>
+        <!-- Add padding bottom for mobile to prevent overlap with fixed controls -->
       </div>
     </div>
   </div>
