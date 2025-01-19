@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import GaugeIcon from '@/components/icons/GaugeIcon.vue'
+import IconComponent from '@/components/icon/IconComponent.vue'
 import { SPEED_PRESETS } from '@/constants/simulation'
 import { useSimulatorStore } from '@/stores/simulator'
 import { computed } from 'vue'
@@ -23,7 +23,7 @@ const handleSpeedChange = (speed: (typeof SPEED_PRESETS)[number]['value']) => {
 <template>
   <div class="flex items-center gap-2">
     <div class="flex items-center text-gray-700 text-sm font-medium">
-      <GaugeIcon class="w-4 h-4 mr-1" />
+      <IconComponent name="Gauge" class="w-4 h-4 mr-1" />
       Hız:
     </div>
     <div class="flex items-center gap-1">

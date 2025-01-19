@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import PauseIcon from '@/components/icons/PauseIcon.vue'
-import PlayIcon from '@/components/icons/PlayIcon.vue'
+import IconComponent from '@/components/icon/IconComponent.vue'
 import { useSimulatorStore } from '@/stores/simulator'
 import GameClock from './GameClock.vue'
 import SpeedControls from './SpeedControls.vue'
@@ -26,7 +25,7 @@ const simulator = useSimulatorStore()
             :disabled="simulator.isRunning"
             class="inline-flex items-center justify-center px-3 py-1.5 rounded-lg bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
           >
-            <PlayIcon class="w-4 h-4 mr-1" />
+            <IconComponent name="Play" class="w-4 h-4 mr-1" />
             Başlat
           </button>
 
@@ -35,7 +34,7 @@ const simulator = useSimulatorStore()
             :disabled="!simulator.isRunning"
             class="inline-flex items-center justify-center px-3 py-1.5 rounded-lg bg-red-600 text-white text-sm font-medium hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
           >
-            <PauseIcon class="w-4 h-4 mr-1" />
+            <IconComponent name="Pause" class="w-4 h-4 mr-1" />
             Durdur
           </button>
         </div>

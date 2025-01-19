@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import ClockIcon from '@/components/icons/ClockIcon.vue'
 import { useSimulatorStore } from '@/stores/simulator'
 import { computed } from 'vue'
+import IconComponent from '../icon/IconComponent.vue'
 
 const simulator = useSimulatorStore()
 
@@ -14,7 +14,7 @@ const timeSegments = computed(() => {
 
 <template>
   <div class="flex items-center space-x-2">
-    <ClockIcon class="w-4 h-4 text-gray-600" />
+    <IconComponent name="Clock" class="w-4 h-4 text-gray-600" />
     <div class="text-gray-700 text-sm font-medium">Zaman:</div>
     <div class="flex items-center text-lg font-bold tracking-wider">
       <div
