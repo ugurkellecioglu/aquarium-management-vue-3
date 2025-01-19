@@ -29,6 +29,15 @@ export const useFishStore = defineStore('fish', () => {
     fish.value = transformFishData(data)
   }
 
+  function removeFeedingTime(fishId: number, feedingTime: number): void {
+    const targetFish = fish.value.find((f) => f.id === fishId)
+    if (!targetFish) {
+      console.warn(`Fish with id ${fishId} not found`)
+      return
+    }
+    targetFish.feedingTimes = targetFish.feedingTimes.filter((time) => time !== feedingTime)
+  }
+
   /**
    * Feeds a specific fish by ID with a given amount.
    * Returns true if feeding was successful, false otherwise.
@@ -57,14 +66,15 @@ export const useFishStore = defineStore('fish', () => {
       return isWithinFeedingWindow(currentTime, feedingTime)
     })
 
-    console.log(canFeed, amountIsExact)
-
     if (canFeed && amountIsExact) {
       targetFish.healthStatus = improveHealthStatus(targetFish.healthStatus)
       targetFish.skippedFeedings = 0
       targetFish.feedingSchedule.lastFeed = currentTime
       targetFish.feedingTimes = calculateFeedingTimes(targetFish)
       targetFish.todayFeedingAmount += amount
+
+      removeFeedingTime(targetFish.id, currentTime)
+
       return true
     } else {
       if (targetFish.skippedFeedings == 1) {
