@@ -70,29 +70,7 @@ onMounted(() => {
   </div>
 </template>
 
-<style>
-/* Health status colors */
-.health-good {
-  @apply text-green-700;
-}
-
-.health-standard {
-  @apply text-orange-600;
-}
-
-.health-bad {
-  @apply text-red-700;
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
+<style scoped>
 .app-container {
   min-height: 100vh;
   display: flex;
