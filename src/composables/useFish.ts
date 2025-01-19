@@ -58,6 +58,10 @@ export function useFish(fish: ExtendedFish) {
     return `${hoursUntilFeed} ${TIME_FORMAT.HOUR} ${remainingMinutes} ${TIME_FORMAT.MINUTE}`
   })
 
+  const todayFeedingAmount = computed(() => {
+    return fish.todayFeedingAmount.toFixed(2)
+  })
+
   function handleFeed() {
     fishStore.feedFish(fish.id, feedingAmount.value)
   }
@@ -71,5 +75,6 @@ export function useFish(fish: ExtendedFish) {
     isFishDead,
     feedingAdvice,
     handleFeed,
+    todayFeedingAmount,
   }
 }

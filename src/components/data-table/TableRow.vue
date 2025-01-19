@@ -16,6 +16,7 @@ const {
   timeSinceLastFeed,
   isFishDead,
   feedingAdvice,
+  todayFeedingAmount,
   handleFeed,
 } = useFish(props.fish)
 
@@ -30,7 +31,7 @@ const { isRunning } = toRefs(useSimulatorStore())
     <td class="p-4 text-sm text-gray-600">{{ fish.feedingSchedule.intervalInHours }} saat</td>
     <td class="p-4 text-sm text-gray-600">{{ recommendedDailyFeeding }}g/gün</td>
     <td class="p-4 text-sm text-gray-600">{{ recommendedPerMeal }}g/öğün</td>
-    <td class="p-4 text-sm text-gray-600">{{ fish.todayFeedingAmount }}g</td>
+    <td class="p-4 text-sm text-gray-600">{{ todayFeedingAmount }}g</td>
     <td class="p-4 text-sm text-gray-600">{{ timeSinceLastFeed }}</td>
     <td class="p-4 text-sm text-gray-600">
       <span v-if="!isFishDead">{{ feedingAdvice }}</span>
