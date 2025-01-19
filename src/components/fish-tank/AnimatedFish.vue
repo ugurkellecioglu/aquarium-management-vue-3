@@ -1,71 +1,11 @@
 <script setup lang="ts">
 import IconComponent from '@/components/icon/IconComponent.vue'
+import { useFish } from '@/composables/useFish'
 import { useSimulatorStore } from '@/stores/simulator'
 import type { ExtendedFish } from '@/types/fish'
 import anime from 'animejs'
 import { defineAsyncComponent, onBeforeUnmount, onMounted, ref, toRefs, watch } from 'vue'
 const Popover = defineAsyncComponent(() => import('primevue/popover'))
-
-// useFish.ts
-import { FEEDING_TEXT, HEALTH_STATUS, TIME_FORMAT } from '@/constants/text'
-import { useFishStore } from '@/stores/fish'
-import { FishHealthStatus } from '@/types/fish'
-import { differenceInHours, differenceInMinutes, formatDistance } from 'date-fns'
-import { tr } from 'date-fns/locale'
-import { computed } from 'vue'
-
-const fishStore = useFishStore()
-const simulator = useSimulatorStore()
-
-const recommendedDailyFeeding = computed(() => fishStore.getRecommendedDailyFeeding(fish))
-
-const recommendedPerMeal = computed(() => fishStore.getRecommendedPerMeal(fish))
-const feedingAmount = ref(recommendedPerMeal)
-
-const healthStatus = computed(() => {
-  const status = HEALTH_STATUS[fish.healthStatus]
-  return {
-    healthStatus: fish.healthStatus,
-    text: `${status.emoji} ${status.text}`,
-    class: `health-${fish.healthStatus.toLowerCase()}`,
-  }
-})
-
-const timeSinceLastFeed = computed(() => {
-  const currentTime = simulator.currentTime
-  return formatDistance(new Date(fish.feedingSchedule.lastFeed), currentTime, {
-    locale: tr,
-  })
-})
-
-const isFishDead = computed(() => {
-  return fish.healthStatus === FishHealthStatus.DEAD
-})
-
-const feedingAdvice = computed(() => {
-  const currentTime = simulator.currentTime
-  const nextFeedTime = new Date(
-    fish.feedingSchedule.lastFeed + fish.feedingSchedule.intervalInHours * 60 * 60 * 1000,
-  )
-
-  const minutesUntilFeed = differenceInMinutes(nextFeedTime, currentTime)
-  const hoursUntilFeed = differenceInHours(nextFeedTime, currentTime)
-  const remainingMinutes = minutesUntilFeed % 60
-
-  if (!remainingMinutes && hoursUntilFeed > 0) {
-    return `${hoursUntilFeed} ${TIME_FORMAT.HOUR}`
-  }
-
-  if (hoursUntilFeed <= 0 && remainingMinutes <= 0) {
-    return `${FEEDING_TEXT.TIME_TO_FEED}`
-  }
-
-  return `${hoursUntilFeed} ${TIME_FORMAT.HOUR} ${remainingMinutes} ${TIME_FORMAT.MINUTE}`
-})
-
-function handleFeed() {
-  fishStore.feedFish(fish.id, feedingAmount.value)
-}
 
 const props = defineProps<{
   fish: ExtendedFish
@@ -225,6 +165,17 @@ function onPopoverShow() {
     }
   })
 }
+
+const {
+  healthStatus,
+  timeSinceLastFeed,
+  handleFeed,
+  recommendedDailyFeeding,
+  recommendedPerMeal,
+  feedingAdvice,
+  isFishDead,
+  feedingAmount,
+} = useFish(props.fish)
 
 // Add watch for health status
 watch(
