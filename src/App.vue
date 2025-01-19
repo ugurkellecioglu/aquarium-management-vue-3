@@ -5,26 +5,24 @@ import GameControls from '@/components/game-manager/GameControls.vue'
 import { useFishStore } from '@/stores/fish'
 import { useSimulatorStore } from '@/stores/simulator'
 import { computed, onMounted, toRefs, watch } from 'vue'
-// Store setup
+
 const simulator = useSimulatorStore()
 const fishStore = useFishStore()
+
 const { isFetching, error, fish, isAllFishDead } = toRefs(fishStore)
 const { updateFishHealth, fetchFish } = fishStore
 
-// Watch fish health when time changes
+const showLoading = computed(() => isFetching.value)
+const showError = computed(() => error.value)
+const showContent = computed(() => !isFetching.value && !error.value)
+
 watch(() => simulator.currentTime, updateFishHealth)
 
-// Watch for all fish dying
 watch(isAllFishDead, (allDead) => {
   if (allDead) {
     simulator.stopSimulation()
   }
 })
-
-// Computed properties for better reactivity and readability
-const showLoading = computed(() => isFetching.value)
-const showError = computed(() => error.value)
-const showContent = computed(() => !isFetching.value && !error.value)
 
 onMounted(() => {
   fetchFish()
