@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import GaugeIcon from '@/components/icons/GaugeIcon.vue'
+import { SPEED_PRESETS } from '@/constants/simulation'
 import { useSimulatorStore } from '@/stores/simulator'
 import { computed } from 'vue'
 
@@ -10,14 +11,6 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   disabled: false,
 })
-
-// Speed presets in seconds
-const SPEED_PRESETS = [
-  { value: 1, label: '1x' },
-  { value: 60, label: '1m/s' },
-  { value: 120, label: '2m/s' },
-  { value: 3600, label: '1h/s' },
-] as const
 
 const simulator = useSimulatorStore()
 const currentSpeed = computed(() => simulator.speed)
