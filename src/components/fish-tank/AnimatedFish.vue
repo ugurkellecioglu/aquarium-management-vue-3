@@ -35,6 +35,8 @@ const FISH_WIDTH = 80
 const FISH_HEIGHT = 32
 const popover = ref<InstanceType<typeof Popover> | null>(null)
 
+const shownByClick = ref(false)
+
 function getRandomPosition() {
   const availableWidth =
     props.tankDimensions.width - props.tankDimensions.borderWidth * 2 - FISH_WIDTH
@@ -136,20 +138,36 @@ function onClickFish(event: MouseEvent) {
   if (isRunning.value && !isPaused.value) {
     pauseSimulation()
   }
+  shownByClick.value = true
   popover.value?.show(event)
 }
 
-// When the popover hides
+function onMouseEnter(event: MouseEvent) {
+  if (shownByClick.value) return
+
+  if (isRunning.value && !isPaused.value) {
+    pauseSimulation()
+  }
+  popover.value?.show(event)
+}
+
+function onMouseLeave() {
+  if (shownByClick.value) return
+
+  if (isPaused.value) {
+    resumeSimulation()
+  }
+  popover.value?.hide()
+}
+
 function onPopoverHide() {
+  shownByClick.value = false
   if (isPaused.value) {
     resumeSimulation()
   }
 }
 
 function onPopoverShow() {
-  // setTimeout is used to ensure that this code block is executed after
-  // @hide event is fired from popover but at the same time another fish's popover's @show event is fired
-  // otherwise, the simulation will be paused and resumed again
   setTimeout(() => {
     if (isRunning.value && !isPaused.value) {
       pauseSimulation()
@@ -198,6 +216,8 @@ watch(
     class="absolute z-50 p-4 rounded-xl w-24 cursor-pointer fish-element"
     :class="{ 'grayscale opacity-50': isFishDead }"
     @click="onClickFish($event)"
+    @mouseenter="onMouseEnter($event)"
+    @mouseleave="onMouseLeave"
   >
     <IconComponent :name="props.fish.type as IconNames" class="w-full h-full" />
   </div>
