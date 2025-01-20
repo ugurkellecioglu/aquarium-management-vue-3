@@ -6,21 +6,24 @@ import { useFishStore } from '@/stores/fish'
 import { useSimulatorStore } from '@/stores/simulator'
 import { computed, onMounted, toRefs, watch } from 'vue'
 
-const simulator = useSimulatorStore()
+const { currentTime, stopSimulation } = toRefs(useSimulatorStore())
 const fishStore = useFishStore()
 
 const { isFetching, error, fish, isAllFishDead } = toRefs(fishStore)
-const { updateFishHealth, fetchFish } = fishStore
+const { updateFishHealth, fetchFish, updateFishTodayFeedingAmount } = fishStore
 
 const showLoading = computed(() => isFetching.value)
 const showError = computed(() => error.value)
 const showContent = computed(() => !isFetching.value && !error.value)
 
-watch(() => simulator.currentTime, updateFishHealth)
+watch(currentTime, (oldValue, newValue) => {
+  updateFishHealth()
+  updateFishTodayFeedingAmount({ currentTime: newValue, oldTime: oldValue })
+})
 
 watch(isAllFishDead, (allDead) => {
   if (allDead) {
-    simulator.stopSimulation()
+    stopSimulation()
   }
 })
 

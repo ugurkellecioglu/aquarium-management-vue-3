@@ -127,6 +127,23 @@ export const useFishStore = defineStore('fish', () => {
     })
   }
 
+  function updateFishTodayFeedingAmount({
+    currentTime,
+    oldTime,
+  }: {
+    currentTime: Date
+    oldTime: Date
+  }): void {
+    const dayOne = currentTime.getDay()
+    const dayTwo = oldTime.getDay()
+
+    if (dayOne === dayTwo) return
+
+    fish.value.forEach((fish) => {
+      fish.todayFeedingAmount = 0
+    })
+  }
+
   const isAllFishDead = computed(() => {
     return fish.value.every((fish) => fish.healthStatus === FishHealthStatus.DEAD)
   })
@@ -178,6 +195,7 @@ export const useFishStore = defineStore('fish', () => {
     fetchFish,
     feedFish,
     updateFishHealth,
+    updateFishTodayFeedingAmount,
 
     getFeedingScheduleInfo,
     getRecommendedDailyFeeding,
