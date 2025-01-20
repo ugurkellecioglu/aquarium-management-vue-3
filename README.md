@@ -36,7 +36,11 @@ This project implements:
 1. **Fetch and Store Data**:
 
    - Uses a custom `useFetch` composable and `fishService.ts` to retrieve fish data from an external API.
-   - Data is stored in Pinia (`stores/fish.ts`).
+   - Raw API data is transformed via `fishTransformer.ts` to:
+     - Convert feeding schedule times to timestamps (e.g., '09:00' -> timestamp)
+     - Initialize health tracking properties (status, skipped feedings)
+     - Calculate daily feeding times and amounts
+   - Transformed data is stored in Pinia (`stores/fish.ts`) for consistent state management
 
 2. **Accelerated Clock**:
 
@@ -50,15 +54,16 @@ This project implements:
      - **Time since last feed** (localized with `date-fns`)
      - **Feeding advice** (e.g., how long until next feeding or if it's time now)
      - **Health status** (including checks for dead fish)
-     - **Feed action** (calling `fishStore.feedFish(...)` to update store data)
 
 4. **Feeding Mechanism**:
 
-   - Clicking the **Feed** button updates the fish’s `lastFeed` time, triggers a store action (`feedFish`), and recalculates health.
+   - Clicking the **Feed** button updates the fish's `lastFeed` time, triggers a store action (`feedFish`), and recalculates health.
+   - Check for missed feedings and update health accordingly.
+   - Fish can die if they are **Bad** in health and miss a feeding.
 
 5. **UI Components**:
 
-   - `fish-container`, `fish-datatable`, `header`, `icons`, `layout` — each addresses a specific portion of the UI.
+   - `fish-tank`, `data-table`, `game-manager`, `icons`, `layout` — each addresses a specific portion of the UI.
    - All are located under `components/`.
 
 6. **Transformers & Utils**:
@@ -80,9 +85,9 @@ This project implements:
 
 - **Vue 3** with the **Composition API**
 - **Pinia** for state management
-- **Vite** (or another build tool)
+- **Vite**
 - **TypeScript**
-- **Testing Framework**: You can use **Jest**, **Vitest**, or any other modern testing tool.
+- **Testing Framework**: **Vitest**
 
 <br />
 
@@ -91,8 +96,8 @@ This project implements:
 1. **Clone the repository**:
 
    ```bash
-   git clone <REPO_URL>
-   cd <REPO_FOLDER_NAME>
+   git clone https://github.com/ugurkellecioglu/aquarium-management-vue-3
+   cd aquarium-management-vue-3
    ```
 
 2. **Install dependencies**:
@@ -144,9 +149,9 @@ This project implements:
 .
 ├── components
 │   ├── __tests__             # Tests for component functionalities
-│   ├── fish-container        # Aquarium visual and fish animations
-│   ├── fish-datatable        # Table layout for fish data
-│   ├── header                # App header component
+│   ├── fish-tank        # Aquarium visual and fish animations
+│   ├── data-table        # Table layout for fish data
+│   ├── game-manager        # Game manager/control component
 │   ├── icons                 # Icon components
 │   └── layout                # General layout components
 │
@@ -160,7 +165,7 @@ This project implements:
 │   └── text.ts               # UI text constants
 │
 ├── plugins
-│   └── apiClient.ts          # Axios or fetch plugin initialization
+│   └── apiClient.ts          # Axios initialization
 │
 ├── services
 │   └── fishService.ts        # API calls and data retrieval logic
@@ -198,11 +203,11 @@ This project implements:
 
 1. **Start the Application**:
 
-   - Access the local URL (usually `http://localhost:3000/` or `http://localhost:5173/`) in your browser.
+   - Access the local URL (default `http://localhost:5173/`) in your browser.
 
 2. **Time Simulation**:
 
-   - A digital clock runs at different speeds (1x, 60x, 120x, 3600x) managed via `stores/simulator.ts`.
+   - A digital clock runs at different speeds (1x, 1m/s, 2m/s, 1h/s) managed via `stores/simulator.ts`.
 
 3. **Fish Interaction** (via `useFish.ts`):
 
@@ -212,12 +217,12 @@ This project implements:
    - **Health Status**: Returns visual indicators (e.g., emoji, text label, CSS class).
    - **Feed Action**: Invokes `fishStore.feedFish(...)` to update feeding time and health.
 
-4. **Fish Table**:
+4. **Data Table**:
 
-   - The `fish-datatable` displays fish data: name, type, weight, health status, etc. Each row includes a "Feed" button invoking `handleFeed()` from `useFish.ts`.
+   - The `data-table` displays fish data: name, type, weight, health status, etc. Each row includes a "Feed" button invoking `feedFish` action.
 
 5. **Aquarium View**:
-   - The `fish-container` component displays fish animations. Hover to see a fish’s name, health, or last feed info.
+   - The `fish-tank` component displays fish animations. Hover to see a fish's name, health, or last feed info.
 
 <br />
 
@@ -270,7 +275,7 @@ This project implements:
 
 - Correct state updates in `stores/fish.ts` and `stores/simulator.ts`.
 - Proper feeding schedule and health transitions in `useFish.ts`.
-- UI rendering tests of `fish-datatable` and `fish-container` components.
+- UI rendering tests of `data-table` and `fish-tank` components.
 
 <br />
 
@@ -283,3 +288,8 @@ This project implements:
   - Accidental multiple feeds in a short timeframe (health penalty or partial acceptance).
 - **Customization**:
   - Adjust animation speed, aquarium styling, or feeding thresholds via constants in `constants/feeding.ts` or `constants/simulation.ts`.
+
+## License
+
+This project is open-sourced under the MIT License - see the [LICENSE](LICENSE) file for details.
+
