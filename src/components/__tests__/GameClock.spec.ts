@@ -3,6 +3,7 @@ import { mount } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import { beforeEach, describe, expect, it } from 'vitest'
 import GameClock from '../game-manager/GameClock.vue'
+import IconComponent from '../icon/IconComponent.vue'
 
 describe('GameClock', () => {
   beforeEach(() => {
@@ -12,8 +13,9 @@ describe('GameClock', () => {
   it('renders properly with all clock elements', () => {
     const wrapper = mount(GameClock)
 
-    // Check if clock icon exists
-    expect(wrapper.findComponent({ name: 'ClockIcon' }).exists()).toBe(true)
+    // Check if icon component exists with correct name prop
+    expect(wrapper.findComponent(IconComponent).exists()).toBe(true)
+    expect(wrapper.findComponent(IconComponent).props('name')).toBe('Clock')
 
     // Check if label exists
     expect(wrapper.text()).toContain('Zaman:')
