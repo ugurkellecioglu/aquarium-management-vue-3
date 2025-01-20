@@ -13,7 +13,9 @@ This repository contains a web application designed to track a virtual aquarium.
 5. [Project Structure](#project-structure)
 6. [Usage](#usage)
 7. [Testing](#testing)
-8. [Additional Notes](#additional-notes)
+8. [Roadmap](#roadmap)
+9. [Contribution Guide](#contribution-guide)
+10. [Additional Notes](#additional-notes)
 
 <br />
 
@@ -133,10 +135,13 @@ This project implements:
    ```
 
 5. **Build for production**:
+
    ```bash
    npm run build
    ```
+
    or
+
    ```bash
    yarn build
    ```
@@ -149,9 +154,9 @@ This project implements:
 .
 ├── components
 │   ├── __tests__             # Tests for component functionalities
-│   ├── fish-tank        # Aquarium visual and fish animations
-│   ├── data-table        # Table layout for fish data
-│   ├── game-manager        # Game manager/control component
+│   ├── fish-tank             # Aquarium visual and fish animations
+│   ├── data-table            # Table layout for fish data
+│   ├── game-manager          # Game manager/control component
 │   ├── icons                 # Icon components
 │   └── layout                # General layout components
 │
@@ -226,26 +231,6 @@ This project implements:
 
 <br />
 
-## Screenshots
-
-### Desktop View
-
-![Image](https://github.com/user-attachments/assets/6eb0ffc1-1942-4f17-bb52-44181fbbc94a)
-
-### Mobile View
-
-![Image](https://github.com/user-attachments/assets/6ff211f9-869e-433c-a800-49e440179a6f)
-
-### Game Over Desktop
-
-![Image](https://github.com/user-attachments/assets/0f9e0d3c-5860-49d1-8836-8b1275308435)
-
-### Fish Die Animation
-
-![Fish Die Animation](https://github.com/user-attachments/assets/2542c399-6781-4737-bff2-624bbbae6c7d)
-
-<br />
-
 ## Testing
 
 1. **Run Unit Tests**:
@@ -263,10 +248,13 @@ This project implements:
    - Look inside `components/__tests__` (or other designated test folders) for the test definitions.
 
 2. **Coverage Reports**:
+
    ```bash
    npm run coverage
    ```
+
    or
+
    ```bash
    yarn coverage
    ```
@@ -276,6 +264,91 @@ This project implements:
 - Correct state updates in `stores/fish.ts` and `stores/simulator.ts`.
 - Proper feeding schedule and health transitions in `useFish.ts`.
 - UI rendering tests of `data-table` and `fish-tank` components.
+
+<br />
+
+## Roadmap
+
+Below are upcoming features and improvements planned for future releases:
+
+- [ ] **More Intuitive UI**  
+      Improve overall user experience and interface design (e.g., clearer layouts, better spacing, interactive feedback).
+
+- [ ] **Fish Growth Mechanics**
+
+  - As fish eat, their weight increases over time.
+  - Adjust feeding amount dynamically based on the new weight (making the game more challenging).
+
+- [ ] **Mobile Indicators**
+
+  - Add a small exclamation mark (!) near fish in the tank on mobile devices to indicate it’s time to feed.
+
+- [ ] **Additional Animations and Effects**
+
+  - Animated transitions for feeding, fish death, and fish growth changes.
+
+- [ ] **Expanded Error Handling**
+  - Provide more robust fallback UIs and user feedback for edge cases (e.g., repeated feedings in short intervals).
+
+Feel free to open an issue if you have ideas or suggestions you’d like to see in the roadmap.
+
+<br />
+
+## Contribution Guide
+
+We welcome contributions from the community! To get started:
+
+1. **Fork the Repository**
+
+   - Click the "Fork" button at the top of this repository to create a copy on your GitHub account.
+
+2. **Clone Your Fork**
+
+   ```bash
+   git clone https://github.com/<your-username>/aquarium-management-vue-3.git
+   cd aquarium-management-vue-3
+   ```
+
+3. **Create a Branch**
+
+   - Make a new branch for your feature or bugfix:
+     ```bash
+     git checkout -b feature/my-new-feature
+     ```
+
+4. **Implement Your Changes**
+
+   - Add or modify code, documentation, or tests as needed to address the issue or feature.
+
+5. **Run Tests Locally**
+
+   - Make sure everything passes:
+     ```bash
+     npm run test
+     ```
+   - Also check coverage or linting if relevant:
+     ```bash
+     npm run coverage
+     npm run lint
+     ```
+
+6. **Commit and Push**
+
+   ```bash
+   git add .
+   git commit -m "feat: add my awesome new feature"
+   git push origin feature/my-new-feature
+   ```
+
+7. **Open a Pull Request**
+
+   - Go to your fork on GitHub, select your new branch, and create a Pull Request (PR) to the `main` branch of this repository.
+   - Provide a clear and descriptive title and include any relevant details or screenshots.
+
+8. **Review and Merge**
+   - Project maintainers will review your PR, request changes if needed, and merge it once approved.
+
+**Thank you for your contributions!**
 
 <br />
 
@@ -292,4 +365,3 @@ This project implements:
 ## License
 
 This project is open-sourced under the MIT License - see the [LICENSE](LICENSE) file for details.
-
