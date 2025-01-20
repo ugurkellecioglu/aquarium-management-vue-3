@@ -15,7 +15,8 @@ export function useFish(fish: ExtendedFish) {
   const recommendedDailyFeeding = computed(() => fishStore.getRecommendedDailyFeeding(fish))
 
   const recommendedPerMeal = computed(() => fishStore.getRecommendedPerMeal(fish))
-  const feedingAmount = ref(recommendedPerMeal)
+
+  const feedingAmount = ref(fishStore.getRecommendedPerMeal(fish))
 
   const healthStatus = computed(() => {
     const status = HEALTH_STATUS[fish.healthStatus]

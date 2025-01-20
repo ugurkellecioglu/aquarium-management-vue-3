@@ -233,4 +233,39 @@ describe('Fish Store', () => {
       expect(store.getRecommendedPerMeal(transformedFishData)).toBe(0.5) // 1/2 of daily amount
     })
   })
+
+  describe('updateFishTodayFeedingAmount', () => {
+    it('resets feeding amounts when day changes', () => {
+      const store = useFishStore()
+      const mockFishData = [
+        {
+          id: 1,
+          name: 'Nemo',
+          type: 'Clownfish',
+          weight: 100,
+          feedingSchedule: {
+            lastFeed: '09:00',
+            intervalInHours: 12,
+          },
+        },
+      ]
+      const [transformedFishData] = transformFishData(mockFishData)
+      transformedFishData.todayFeedingAmount = 1.5
+      store.fish = [transformedFishData]
+
+      // Same day - should not reset
+      store.updateFishTodayFeedingAmount({
+        currentTime: new Date('2024-01-01T23:59:59'),
+        oldTime: new Date('2024-01-01T10:00:00'),
+      })
+      expect(store.fish[0].todayFeedingAmount).toBe(1.5)
+
+      // Different day - should reset
+      store.updateFishTodayFeedingAmount({
+        currentTime: new Date('2024-01-02T00:00:00'),
+        oldTime: new Date('2024-01-01T23:59:59'),
+      })
+      expect(store.fish[0].todayFeedingAmount).toBe(0)
+    })
+  })
 })
