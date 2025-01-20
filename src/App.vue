@@ -7,6 +7,8 @@ import GameOver from '@/components/layout/GameOver.vue'
 import { useFishStore } from '@/stores/fish'
 import { useSimulatorStore } from '@/stores/simulator'
 import { computed, onMounted, toRefs, watch } from 'vue'
+import AppError from './components/layout/AppError.vue'
+import AppLoading from './components/layout/AppLoading.vue'
 
 const { currentTime, stopSimulation } = toRefs(useSimulatorStore())
 const fishStore = useFishStore()
@@ -53,8 +55,8 @@ onMounted(() => {
               </header>
 
               <!-- Loading State -->
-              <Loading v-if="showLoading" />
-              <Error
+              <AppLoading v-if="showLoading" />
+              <AppError
                 v-else-if="showError"
                 title="Bir hata oluştu"
                 actionText="Tekrar Dene"
