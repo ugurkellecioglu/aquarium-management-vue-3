@@ -16,7 +16,7 @@ const showLoading = computed(() => isFetching.value)
 const showError = computed(() => error.value)
 const showContent = computed(() => !isFetching.value && !error.value)
 
-watch(currentTime, (oldValue, newValue) => {
+watch(currentTime, (newValue, oldValue) => {
   updateFishHealth()
   updateFishTodayFeedingAmount({ currentTime: newValue, oldTime: oldValue })
 })
