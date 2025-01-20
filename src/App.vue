@@ -2,6 +2,8 @@
 import FishTable from '@/components/data-table/FishTable.vue'
 import FishTank from '@/components/fish-tank/FishTank.vue'
 import GameControls from '@/components/game-manager/GameControls.vue'
+import AppFooter from '@/components/layout/AppFooter.vue'
+import GameOver from '@/components/layout/GameOver.vue'
 import { useFishStore } from '@/stores/fish'
 import { useSimulatorStore } from '@/stores/simulator'
 import { computed, onMounted, toRefs, watch } from 'vue'
@@ -61,11 +63,12 @@ onMounted(() => {
               <main v-else-if="showContent" class="space-y-8">
                 <FishTank />
                 <FishTable :fish="fish" />
+                <GameOver v-if="isAllFishDead" />
               </main>
             </div>
           </div>
         </div>
-        <!-- Add padding bottom for mobile to prevent overlap with fixed controls -->
+        <AppFooter />
       </div>
     </div>
   </div>
