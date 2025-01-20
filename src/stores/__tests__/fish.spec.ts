@@ -1,6 +1,7 @@
 import { useFetch } from '@/composables/useFetch'
 import { transformFishData } from '@/transformers/fishTransformer'
-import { Fish, FishHealthStatus } from '@/types/fish'
+import type { Fish } from '@/types/fish'
+import { FishHealthStatus } from '@/types/fish'
 import { createPinia, setActivePinia } from 'pinia'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { ref } from 'vue'
@@ -82,37 +83,33 @@ describe('Fish Store', () => {
   })
 
   describe('feedFish', () => {
-    const mockFish = {
-      id: 1,
-      name: 'Nemo',
-      species: 'Clownfish',
-      weight: 100,
-      healthStatus: FishHealthStatus.HEALTHY,
-      skippedFeedings: 0,
-      todayFeedingAmount: 0,
-      feedingSchedule: {
-        lastFeed: new Date('2024-01-01T10:00:00').toISOString(),
-        intervalInHours: 12,
-      },
-      feedingTimes: [
-        new Date('2024-01-01T10:00:00').getTime(), // 10:00 feeding time
-        new Date('2024-01-01T22:00:00').getTime(), // 22:00 feeding time
-      ],
-    }
-
     it('successfully feeds fish with correct amount during feeding window', () => {
       const store = useFishStore()
       const simulator = useSimulatorStore()
 
+      const mockFishData = [
+        {
+          id: 1,
+          name: 'Nemo',
+          type: 'Clownfish',
+          weight: 100,
+          feedingSchedule: {
+            lastFeed: '10:05',
+            intervalInHours: 12,
+          },
+        },
+      ]
+      const [transformedFishData] = transformFishData(mockFishData)
+
       // Setup initial state
-      store.fish = [mockFish]
+      store.fish = [transformedFishData]
       simulator.currentTime = new Date('2024-01-01T10:05:00') // Within 10:00 feeding window
 
-      const recommendedAmount = store.getRecommendedPerMeal(mockFish)
-      const result = store.feedFish(mockFish.id, recommendedAmount)
+      const recommendedAmount = store.getRecommendedPerMeal(transformedFishData)
+      const result = store.feedFish(transformedFishData.id, recommendedAmount)
 
       expect(result).toBe(true)
-      expect(store.fish[0].healthStatus).toBe(FishHealthStatus.HEALTHY)
+      expect(store.fish[0].healthStatus).toBe(FishHealthStatus.STANDARD)
       expect(store.fish[0].todayFeedingAmount).toBe(recommendedAmount)
     })
 
@@ -120,24 +117,52 @@ describe('Fish Store', () => {
       const store = useFishStore()
       const simulator = useSimulatorStore()
 
-      store.fish = [mockFish]
+      const mockFishData = [
+        {
+          id: 1,
+          name: 'Nemo',
+          type: 'Clownfish',
+          weight: 100,
+          feedingSchedule: {
+            lastFeed: '10:05',
+            intervalInHours: 12,
+          },
+        },
+      ]
+      const [transformedFishData] = transformFishData(mockFishData)
+      transformedFishData.healthStatus = FishHealthStatus.STANDARD
+      store.fish = [transformedFishData]
       simulator.currentTime = new Date('2024-01-01T10:05:00')
 
-      const incorrectAmount = store.getRecommendedPerMeal(mockFish) + 1
-      const result = store.feedFish(mockFish.id, incorrectAmount)
+      const incorrectAmount = store.getRecommendedPerMeal(transformedFishData) + 1
+      const result = store.feedFish(transformedFishData.id, incorrectAmount)
 
       expect(result).toBe(false)
-      expect(store.fish[0].healthStatus).toBe(FishHealthStatus.SICK)
+      expect(store.fish[0].healthStatus).toBe(FishHealthStatus.BAD)
     })
 
     it('prevents feeding dead fish', () => {
       const store = useFishStore()
-      const deadFish = { ...mockFish, healthStatus: FishHealthStatus.DEAD }
+      const mockFishData = [
+        {
+          id: 1,
+          name: 'Nemo',
+          type: 'Clownfish',
+          weight: 100,
+          feedingSchedule: {
+            lastFeed: '10:05',
+            intervalInHours: 12,
+          },
+        },
+      ]
+      const [transformedFishData] = transformFishData(mockFishData)
+      transformedFishData.healthStatus = FishHealthStatus.DEAD
 
-      store.fish = [deadFish]
-      const result = store.feedFish(deadFish.id, 1)
+      store.fish = [transformedFishData]
+      const result = store.feedFish(transformedFishData.id, 1)
 
       expect(result).toBe(false)
+      expect(store.fish[0].healthStatus).toBe(FishHealthStatus.DEAD)
     })
   })
 
@@ -146,23 +171,25 @@ describe('Fish Store', () => {
       const store = useFishStore()
       const simulator = useSimulatorStore()
 
-      const mockFish = {
-        id: 1,
-        healthStatus: FishHealthStatus.STANDARD,
-        skippedFeedings: 0,
-        feedingSchedule: {
-          lastFeed: '09:00',
-          intervalInHours: 12,
+      const mockFishData = [
+        {
+          id: 1,
+          name: 'Nemo',
+          type: 'Clownfish',
+          weight: 100,
+          feedingSchedule: {
+            lastFeed: '09:00',
+            intervalInHours: 12,
+          },
         },
-        feedingTimes: [],
-      }
-
-      store.fish = [mockFish]
+      ]
+      const [transformedFishData] = transformFishData(mockFishData)
+      store.fish = [transformedFishData]
       // Set time past feeding window + buffer
       simulator.currentTime = new Date('2024-01-01T22:11:00') // 12 hours + 10 minutes + 1 minute
 
       store.updateFishHealth()
-      expect(store.fish[0].healthStatus).toBe(FishHealthStatus.SICK)
+      expect(store.fish[0].healthStatus).toBe(FishHealthStatus.BAD)
       expect(store.fish[0].skippedFeedings).toBe(1)
     })
 
@@ -170,59 +197,75 @@ describe('Fish Store', () => {
       const store = useFishStore()
       const simulator = useSimulatorStore()
 
-      const mockFish = {
-        id: 1,
-        healthStatus: FishHealthStatus.HEALTHY,
-        skippedFeedings: 0,
-        feedingSchedule: {
-          lastFeed: new Date('2024-01-01T10:00:00').toISOString(),
-          intervalInHours: 12,
+      const mockFishData = [
+        {
+          id: 1,
+          name: 'Nemo',
+          type: 'Clownfish',
+          weight: 100,
+          feedingSchedule: {
+            lastFeed: '09:00',
+            intervalInHours: 12,
+          },
         },
-        feedingTimes: [new Date('2024-01-01T22:00:00').getTime()],
-      }
+      ]
+      const [transformedFishData] = transformFishData(mockFishData)
 
-      store.fish = [mockFish]
+      transformedFishData.healthStatus = FishHealthStatus.STANDARD
+      transformedFishData.feedingTimes = [new Date('2024-01-01T22:00:00').getTime()]
+      transformedFishData.feedingSchedule = {
+        lastFeed: new Date('2024-01-01T10:00:00').getTime(),
+        intervalInHours: 12,
+      }
+      store.fish = [transformedFishData]
       simulator.currentTime = new Date('2024-01-01T22:05:00') // Within feeding window
 
       store.updateFishHealth()
-      expect(store.fish[0].healthStatus).toBe(FishHealthStatus.HEALTHY)
+      expect(store.fish[0].healthStatus).toBe(FishHealthStatus.STANDARD)
       expect(store.fish[0].skippedFeedings).toBe(0)
     })
   })
 
   describe('computed properties', () => {
-    it('correctly determines if all fish are dead', () => {
+    it('correctly determines if all fish are dead', async () => {
       const store = useFishStore()
 
-      store.fish = [
-        { id: 1, healthStatus: FishHealthStatus.DEAD },
-        { id: 2, healthStatus: FishHealthStatus.DEAD },
-      ]
+      await store.fetchFish()
+
+      store.fish.forEach((fish) => {
+        fish.healthStatus = FishHealthStatus.DEAD
+      })
       expect(store.isAllFishDead).toBe(true)
 
-      store.fish = [
-        { id: 1, healthStatus: FishHealthStatus.DEAD },
-        { id: 2, healthStatus: FishHealthStatus.SICK },
-      ]
+      store.fish[0].healthStatus = FishHealthStatus.STANDARD
+
       expect(store.isAllFishDead).toBe(false)
     })
   })
 
   describe('feeding calculations', () => {
-    const mockFish = {
-      id: 1,
-      weight: 100,
-      feedingSchedule: { intervalInHours: 12 },
-    }
+    const mockFishData = [
+      {
+        id: 1,
+        name: 'Nemo',
+        type: 'Clownfish',
+        weight: 100,
+        feedingSchedule: {
+          lastFeed: '09:00',
+          intervalInHours: 12,
+        },
+      },
+    ]
+    const [transformedFishData] = transformFishData(mockFishData)
 
     it('calculates recommended daily feeding amount', () => {
       const store = useFishStore()
-      expect(store.getRecommendedDailyFeeding(mockFish)).toBe(1) // 1% of 100
+      expect(store.getRecommendedDailyFeeding(transformedFishData)).toBe(1) // 1% of 100
     })
 
     it('calculates recommended per meal amount', () => {
       const store = useFishStore()
-      expect(store.getRecommendedPerMeal(mockFish)).toBe(0.5) // 1/2 of daily amount
+      expect(store.getRecommendedPerMeal(transformedFishData)).toBe(0.5) // 1/2 of daily amount
     })
   })
 })
