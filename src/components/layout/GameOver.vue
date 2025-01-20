@@ -5,7 +5,7 @@ const handleRestart = () => {
 </script>
 
 <template>
-  <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 !m-0">
+  <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-max !m-0">
     <div class="bg-white rounded-lg p-8 max-w-md w-full mx-4 shadow-xl">
       <div class="text-center">
         <h2 class="text-3xl font-bold text-gray-900 mb-4">Oyun Bitti!</h2>

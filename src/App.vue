@@ -43,7 +43,7 @@ onMounted(() => {
         <div class="content">
           <div class="min-h-screen bg-gray-50">
             <div
-              class="h-fit fixed z-max sm:translate-x-0 sm:right-8 sm:top-1/2 sm:-translate-y-1/2 bottom-4 left-1/2 sm:left-[initial] -translate-x-1/2"
+              class="h-fit fixed z-max-minus-1 sm:translate-x-0 sm:right-8 sm:top-1/2 sm:-translate-y-1/2 bottom-4 left-1/2 sm:left-[initial] -translate-x-1/2"
             >
               <GameControls />
             </div>

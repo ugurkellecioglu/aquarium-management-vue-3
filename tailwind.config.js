@@ -5,6 +5,7 @@ export default {
     extend: {
       zIndex: {
         max: 2147483647,
+        'max-minus-1': 2147483646,
       },
     },
   },
