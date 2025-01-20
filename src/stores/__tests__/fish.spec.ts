@@ -232,6 +232,31 @@ describe('Fish Store', () => {
       const store = useFishStore()
       expect(store.getRecommendedPerMeal(transformedFishData)).toBe(0.5) // 1/2 of daily amount
     })
+
+    it('tracks daily feeding amount correctly across multiple feeds', () => {
+      const store = useFishStore()
+      const simulator = useSimulatorStore()
+
+      store.fish = [transformedFishData]
+      const recommendedPerMeal = store.getRecommendedPerMeal(transformedFishData)
+
+      // Set initial time to first feeding window
+      simulator.currentTime = new Date('2024-01-01T09:00:00')
+
+      // First feeding
+      store.feedFish(transformedFishData.id, recommendedPerMeal)
+      expect(store.fish[0].todayFeedingAmount).toBe(recommendedPerMeal)
+
+      // Move to next feeding window same day
+      simulator.currentTime = new Date('2024-01-01T21:00:00')
+      store.feedFish(transformedFishData.id, recommendedPerMeal)
+
+      // Should accumulate both feedings
+      expect(store.fish[0].todayFeedingAmount).toBe(recommendedPerMeal * 2)
+      expect(store.fish[0].todayFeedingAmount).toBe(
+        store.getRecommendedDailyFeeding(transformedFishData),
+      )
+    })
   })
 
   describe('updateFishTodayFeedingAmount', () => {
