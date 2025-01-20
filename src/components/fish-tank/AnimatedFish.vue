@@ -151,6 +151,11 @@ function onMouseEnter(event: MouseEvent) {
   popover.value?.show(event)
 }
 
+// TODO: This hides the popover when the mouse leaves the fish element
+// Popover should be rendered in the same parent
+// since it's a portal and rendered in the body
+// we lose the context of the parent when the mouse leaves
+// causes the popover to be hidden
 function onMouseLeave() {
   if (shownByClick.value) return
 
