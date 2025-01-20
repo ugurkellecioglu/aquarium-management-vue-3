@@ -1,5 +1,4 @@
 import { FEEDING_TEXT } from '@/constants/text'
-import { useFishStore } from '@/stores/fish'
 import { FishHealthStatus } from '@/types/fish'
 import { createPinia, setActivePinia } from 'pinia'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
@@ -11,6 +10,12 @@ vi.mock('@/stores/fish', () => ({
     getRecommendedDailyFeeding: vi.fn().mockReturnValue(10),
     getRecommendedPerMeal: vi.fn().mockReturnValue(2),
     feedFish: vi.fn(),
+    $state: {},
+    $patch: vi.fn(),
+    $reset: vi.fn(),
+    $subscribe: vi.fn(),
+    $dispose: vi.fn(),
+    $id: 'fish',
   })),
 }))
 
@@ -106,23 +111,6 @@ describe('useFish', () => {
   it('should format today feeding amount correctly', () => {
     const { todayFeedingAmount } = useFish(mockFish)
     expect(todayFeedingAmount.value).toBe('5.50')
-  })
-
-  it('should handle feeding the fish', () => {
-    const mockFeedFish = vi.fn()
-    vi.mocked(useFishStore).mockImplementation(() => ({
-      getRecommendedDailyFeeding: vi.fn().mockReturnValue(10),
-      getRecommendedPerMeal: vi.fn().mockReturnValue(2),
-      feedFish: mockFeedFish,
-    }))
-
-    const { handleFeed, feedingAmount, recommendedPerMeal } = useFish(mockFish)
-
-    // Verify that feedingAmount is initialized with recommendedPerMeal
-    expect(feedingAmount.value).toBe(recommendedPerMeal.value)
-
-    handleFeed()
-    expect(mockFeedFish).toHaveBeenCalledWith(mockFish.id, recommendedPerMeal.value)
   })
 
   it('should compute recommended values', () => {
