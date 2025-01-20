@@ -1,4 +1,3 @@
-````markdown
 # Aquarium Tracking Application
 
 This repository contains a web application designed to track a virtual aquarium. Its main purpose is to monitor various fish attributes such as species, names, weights, feeding schedules, and overall health. You can feed the fish manually and observe how their health levels change in real-time.
@@ -90,11 +89,11 @@ This project implements:
 ## Getting Started
 
 1. **Clone the repository**:
+
    ```bash
    git clone <REPO_URL>
    cd <REPO_FOLDER_NAME>
    ```
-````
 
 2. **Install dependencies**:
 
@@ -222,6 +221,26 @@ This project implements:
 
 <br />
 
+## Screenshots
+
+### Desktop View
+
+![Image](https://github.com/user-attachments/assets/6eb0ffc1-1942-4f17-bb52-44181fbbc94a)
+
+### Mobile View
+
+![Image](https://github.com/user-attachments/assets/6ff211f9-869e-433c-a800-49e440179a6f)
+
+### Game Over Desktop
+
+![Image](https://github.com/user-attachments/assets/0f9e0d3c-5860-49d1-8836-8b1275308435)
+
+### Fish Die Animation
+
+![Fish Die Animation](https://github.com/user-attachments/assets/2542c399-6781-4737-bff2-624bbbae6c7d)
+
+<br />
+
 ## Testing
 
 1. **Run Unit Tests**:
@@ -264,14 +283,3 @@ This project implements:
   - Accidental multiple feeds in a short timeframe (health penalty or partial acceptance).
 - **Customization**:
   - Adjust animation speed, aquarium styling, or feeding thresholds via constants in `constants/feeding.ts` or `constants/simulation.ts`.
-
----
-
-**We hope you enjoy exploring this Aquarium Tracking Application!**  
-**Feel free to contribute or raise issues if you encounter any problems or have suggestions.**
-
----
-
-```
-
-```
