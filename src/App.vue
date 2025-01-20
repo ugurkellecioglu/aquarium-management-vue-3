@@ -23,7 +23,7 @@ watch(currentTime, (oldValue, newValue) => {
 
 watch(isAllFishDead, (allDead) => {
   if (allDead) {
-    stopSimulation()
+    stopSimulation.value()
   }
 })
 
