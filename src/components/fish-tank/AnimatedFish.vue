@@ -5,6 +5,7 @@ import { useSimulatorStore } from '@/stores/simulator'
 import type { ExtendedFish } from '@/types/fish'
 import anime from 'animejs'
 import { defineAsyncComponent, onBeforeUnmount, onMounted, ref, toRefs, watch } from 'vue'
+import type { IconNames } from '../icon/icons'
 
 const Popover = defineAsyncComponent(() => import('primevue/popover'))
 
@@ -198,7 +199,7 @@ watch(
     :class="{ 'grayscale opacity-50': isFishDead }"
     @click="onClickFish($event)"
   >
-    <IconComponent :name="props.fish.type" class="w-full h-full" />
+    <IconComponent :name="props.fish.type as IconNames" class="w-full h-full" />
   </div>
 
   <Popover
